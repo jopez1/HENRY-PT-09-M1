@@ -1,39 +1,91 @@
 'use strict'
 
-function BinarioADecimal(num) {
-  // tu codigo aca
- // let sum = 0;
+/*
+Definir las funciones recursivas nFactorial y nFibonacci.
 
-  //for (let i = 0; i < num.length; i++) {
-     //sum += +num[i] * 2 ** (num.length - 1 - i);
-  //}
-  //return sum;
+nFactorial(n) debe retornar el factorial de n sabiendo que, siendo n un número natural, su factorial (representado como n!) es el producto
+ de n por todos los números naturales menores que él y mayores a 0. Ejemplo: 5! = 5 * 4 * 3 * 2 * 1
 
- let string = num.split("").reverse().join("");
- let suma = 0;
- for(let i = 0; i < string.length; i++){
-  if(string.charAt(i) == 1){
-    suma += Math.pow(2, i); 
+nFibonacci(n) debe retornar el enésimo número de la secuencia de Fibonacci, tomando al 0 y al 1, respectivamente, como primer y segundo elementos
+ de la misma, y sabiendo que cualquier elemento que se agregue a esta secuencia será el resultado de la suma del último elemento y el anterior.
+Ejemplo: nFibonacci(7) retornará 13, ya que 13 es el dígito que está en la posición 7 de la secuencia.
+
+Secuencia:  0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... 
+
+
+Como ejercicio adicional y completamente opcional, al terminar de resolver este problema pueden intentar definir funciones
+ que logren los mismos resultados pero de manera iterativa.
+*/
+
+function nFactorial(n) {
+  /* var result = n;
+  if (n === 0 || n === 1) 
+    return 1; 
+  while (n > 1) { 
+    n--;
+    result *= n;
   }
- }
- return suma;
+  return result; */
+if(n === 0){
+  return 1;
+}else{
+  return (n * nFactorial(n-1))
 }
 
-function DecimalABinario(num) {
-  // tu codigo aca
-  let binario = "";
-
-  while( num != 0){
-    binario += (num % 2).toString()
-    num = Math.floor(num  / 2)
-  }
-return binario.split("").reverse().join("")
-
-
 }
 
+function nFibonacci(n) {
+  
+  if (n <= 1) return n;
+
+  return nFibonacci(n-1) + nFibonacci(n-2);
+
+  
+}
+
+/*
+Implementar la clase Queue, sabiendo que es una estructura de tipo FIFO, donde el primer elemento que ingresa es el primero que se quita.
+ Definir los siguientes métodos:
+  - enqueue: agrega un valor respetando el orden.
+  - dequeue: remueve un valor respetando el orden. Retorna undefined cuando la queue está vacía.
+  - size: retorna el tamaño (cantidad de elementos) de la queue.
+
+Pueden utilizar class o función constructora.
+*/
+
+/* function Queue() {
+  var enqueue = [];
+  enqueue.push(1); // la cola es [1]
+  enqueue.push(2); // la cola es [1, 2]
+var dequeue = enqueue.shift(); // la cola es [2]
+return dequeue; // muestra 1 */
+
+function Queue() {
+  this.array = [];
+  
+}
+Queue.prototype.size = function(){
+return this.array.length;
+}
+
+Queue.prototype.enqueue = function(elemento){
+this.array.push(elemento)
+}
+
+Queue.prototype.dequeue =function(){
+return this.array.shift()
+}
+
+
+
+
+
+
+// No modifiquen nada debajo de esta linea
+// --------------------------------
 
 module.exports = {
-  BinarioADecimal,
-  DecimalABinario,
-}
+  Queue,
+  nFactorial,
+  nFibonacci
+};
