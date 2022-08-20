@@ -1,91 +1,101 @@
-'use strict'
+"use strict";
 
 /*
-Definir las funciones recursivas nFactorial y nFibonacci.
+ Implementar la clase BinarySearchTree, definiendo los siguientes métodos recursivos:
+  - size: retorna la cantidad total de nodos del árbol
+  - insert: agrega un nodo en el lugar correspondiente
+  - contains: retorna true o false luego de evaluar si cierto valor existe dentro del árbol
+  - depthFirstForEach: recorre el árbol siguiendo el orden depth first (DFS) en cualquiera de sus variantes, según se indique por parámetro ("post-order", "pre-order", o "in-order"). Nota: si no se provee ningún parámetro, hará el recorrido "in-order" por defecto.
+  - breadthFirstForEach: recorre el árbol siguiendo el orden breadth first (BFS)
 
-nFactorial(n) debe retornar el factorial de n sabiendo que, siendo n un número natural, su factorial (representado como n!) es el producto
- de n por todos los números naturales menores que él y mayores a 0. Ejemplo: 5! = 5 * 4 * 3 * 2 * 1
-
-nFibonacci(n) debe retornar el enésimo número de la secuencia de Fibonacci, tomando al 0 y al 1, respectivamente, como primer y segundo elementos
- de la misma, y sabiendo que cualquier elemento que se agregue a esta secuencia será el resultado de la suma del último elemento y el anterior.
-Ejemplo: nFibonacci(7) retornará 13, ya que 13 es el dígito que está en la posición 7 de la secuencia.
-
-Secuencia:  0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... 
-
-
-Como ejercicio adicional y completamente opcional, al terminar de resolver este problema pueden intentar definir funciones
- que logren los mismos resultados pero de manera iterativa.
+  El ábrol utilizado para hacer los tests se encuentra representado en la imagen bst.png dentro del directorio homework.
 */
 
-function nFactorial(n) {
-  /* var result = n;
-  if (n === 0 || n === 1) 
-    return 1; 
-  while (n > 1) { 
-    n--;
-    result *= n;
-  }
-  return result; */
-if(n === 0){
-  return 1;
-}else{
-  return (n * nFactorial(n-1))
+function BinarySearchTree(value) {
+  //en este y los homeworks anteriores primero asignamos "valores" sobre los que vamos a trabajar
+  this.value = value;
+	this.left = null;
+	this.right = null;
+} 
+
+//fuera del bloque definimos lo metodos que hagan lo que tengan que hacer tener en cuenta que nos piden que sean recursivos
+
+BinarySearchTree.prototype.insert = function(value){
+  //pensar si el valor recibido es mayor o menor
+// insertar a la izquierda(numeros menores)
+if(this.value > value){
+  if(!this.left) this.left = new BinarySearchTree(value) //this.left === null
+  else this.left.insert(value)
+
+  // insertar a la derecha(numeros mayores)
+}else if(this.value < value){
+  if(!this.right) this.right = new BinarySearchTree(value)
+  else this.right.insert(value)
+}
 }
 
-}
-
-function nFibonacci(n) {
-  
-  if (n <= 1) return n;
-
-  return nFibonacci(n-1) + nFibonacci(n-2);
-
-  
-}
-
-/*
-Implementar la clase Queue, sabiendo que es una estructura de tipo FIFO, donde el primer elemento que ingresa es el primero que se quita.
- Definir los siguientes métodos:
-  - enqueue: agrega un valor respetando el orden.
-  - dequeue: remueve un valor respetando el orden. Retorna undefined cuando la queue está vacía.
-  - size: retorna el tamaño (cantidad de elementos) de la queue.
-
-Pueden utilizar class o función constructora.
-*/
-
-/* function Queue() {
-  var enqueue = [];
-  enqueue.push(1); // la cola es [1]
-  enqueue.push(2); // la cola es [1, 2]
-var dequeue = enqueue.shift(); // la cola es [2]
-return dequeue; // muestra 1 */
-
-function Queue() {
-  this.array = [];
-  
-}
-Queue.prototype.size = function(){
-return this.array.length;
-}
-
-Queue.prototype.enqueue = function(elemento){
-this.array.push(elemento)
-}
-
-Queue.prototype.dequeue =function(){
-return this.array.shift()
+BinarySearchTree.prototype.size = function(){
+//pensar que hay que sumar todos los nodos del arbol en sus diferentes niveles y de izquierda a derecha
+//caso de corte
+if(!this.left && !this.right) return 1
+if(this.left && !this.right) return 1 + this.left.size()
+if(!this.left && this.right) return 1 + this.right.size()
+if(this.left && this.right) return 1 + this.right.size() + this.left.size()
 }
 
 
 
+BinarySearchTree.prototype.contains = function(value){
+if(this.value === value) return true;
+if(value > this.value){
+  if(!this.right)return false;
+  else return this.right.contains(value);
+}
+if(value < this.value){
+  if(!this.left) return false;
+  else return this.left.contains(value);
+}
+}
 
+// recibimos como parametro cb y order(se autollaman cuando las declaramos dentro del bloque(recursividad))
+BinarySearchTree.prototype.depthFirstForEach = function(cb, order){
+  //pensar como hace el recorrido depthFirstForEach(ver imagen para dare una idea)
+
+if(order === "post-order"){
+  if(this.left) this.left.depthFirstForEach(cb, order)
+  if(this.right) this.right.depthFirstForEach(cb, order)
+  cb(this.value)
+}
+if(order === "pre-order"){
+  cb(this.value)
+  if(this.left) this.left.depthFirstForEach(cb, order)
+  if(this.right) this.right.depthFirstForEach(cb, order)
+}else if
+  (order === "in-order" || !order === undefined){
+    if(this.left) this.left.depthFirstForEach(cb, order)
+    cb(this.value)
+    if(this.right) this.right.depthFirstForEach(cb, order)
+}
+}
+
+
+BinarySearchTree.prototype.breadthFirstForEach = function(cb, array = []){
+//notese que en este ejercicio necesitamos un array como parametro para ir guardando la referencia
+cb(this.value)
+if(this.left) array.push(this.left)
+if(this.right) array.push(this.right)
+
+let next = array.shift()
+//caso de corte y a la vez mi llamada a recursion
+if(next) next.breadthFirstForEach(cb, array)
+//if(array.length > 0) array.shift().breadthFirstForEach(cb, array)
+
+}
 
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
 
 module.exports = {
-  Queue,
-  nFactorial,
-  nFibonacci
+  BinarySearchTree,
 };
