@@ -1,101 +1,93 @@
-"use strict";
+'use strict'
+// No cambies los nombres de las funciones.
 
-/*
- Implementar la clase BinarySearchTree, definiendo los siguientes métodos recursivos:
-  - size: retorna la cantidad total de nodos del árbol
-  - insert: agrega un nodo en el lugar correspondiente
-  - contains: retorna true o false luego de evaluar si cierto valor existe dentro del árbol
-  - depthFirstForEach: recorre el árbol siguiendo el orden depth first (DFS) en cualquiera de sus variantes, según se indique por parámetro ("post-order", "pre-order", o "in-order"). Nota: si no se provee ningún parámetro, hará el recorrido "in-order" por defecto.
-  - breadthFirstForEach: recorre el árbol siguiendo el orden breadth first (BFS)
+function factorear(num) {
+  // Factorear el número recibido como parámetro y devolver en un array
+  // los factores por los cuales se va dividiendo a dicho número (De menor a mayor)
+  // Ej: factorear(180) --> [1, 2, 2, 3, 3, 5] Ya que 1x2x2x3x3x5 = 180 y son todos números primos
+  // Tu código:
 
-  El ábrol utilizado para hacer los tests se encuentra representado en la imagen bst.png dentro del directorio homework.
-*/
+  //FUENTE Jimena Medina COHORTE PT08
+ 
+  let arr = [1] // se empieza a guardar el primer numero primo
+  let primo = 2 // es clave que sea dos porque mas adelante se tiene que dividir
 
-function BinarySearchTree(value) {
-  //en este y los homeworks anteriores primero asignamos "valores" sobre los que vamos a trabajar
-  this.value = value;
-	this.left = null;
-	this.right = null;
+  while(num !== 1){  //caso de corte
+  if(num % primo === 0){
+  arr.push(primo) // recordar que es un bucle y se sigue iterando mientras se siga cumpliendo la condicion
+  num = num / primo
+  }  else{
+    primo ++  // para todo lo demas se sigue 
+  }              
+  }
+return arr
+}
+
+function bubbleSort(array) {
+  // Implementar el método conocido como bubbleSort para ordenar de menor a mayor
+  // el array recibido como parámetro
+  // Devolver el array ordenado resultante
+  // Tu código:
+for(let i = 0; i < array.length; i ++){
+  for(let j = 0; j < array.length - 1 - i; j++){ // LA i ASEGURA QUE VAYA PASANDO COMPARANDO TODO EL ARRAY, QUE SI NO SOLO LO COMPARA UNA VEZ
+    if(array[j] > array[j + 1] ){ //aqui es justamente cuando compara 
+    //swap en esta parte hace el cambio
+    var aux = array[j];
+    array[j] = array[j + 1];
+    array[j + 1] = aux;
+  }
+}
+}
+return array;
+
+}
+
+  function insertionSort(array) {
+    // Implementar el método conocido como insertionSort para ordenar de menor a mayor
+    // el array recibido como parámetro utilizando arreglos
+    // Devolver el array ordenado resultante
+    // Tu código:
+  for(let i = 1; i < array.length; i++){
+    let j = i - 1;
+    let aux = array[i];
+    while(j >= 0 && array[j] > aux){
+      array [j + 1] = array[j];
+      j--;
+    }
+    array[j + 1] = aux;
+  }
+  return array;
+  }
+
+
+function selectionSort(array) {
+  // Implementar el método conocido como selectionSort para ordenar de menor a mayor
+  // el array recibido como parámetro utilizando dos arreglos
+  // Devolver el array ordenado resultante
+  // Tu código:
+  for(let i = 0; i < array.length; i++){
+    let min = i;
+    for(let j = i + 1; j < array.length; j++){
+      if(array[j] < array[min]){
+        min = j
+      }
+    }
+    if(i != min){
+      let aux = array[i]
+      array[i] = array[min];
+      array[min] = aux;
+    }
+  }
+   return array;
 } 
 
-//fuera del bloque definimos lo metodos que hagan lo que tengan que hacer tener en cuenta que nos piden que sean recursivos
 
-BinarySearchTree.prototype.insert = function(value){
-  //pensar si el valor recibido es mayor o menor
-// insertar a la izquierda(numeros menores)
-if(this.value > value){
-  if(!this.left) this.left = new BinarySearchTree(value) //this.left === null
-  else this.left.insert(value)
-
-  // insertar a la derecha(numeros mayores)
-}else if(this.value < value){
-  if(!this.right) this.right = new BinarySearchTree(value)
-  else this.right.insert(value)
-}
-}
-
-BinarySearchTree.prototype.size = function(){
-//pensar que hay que sumar todos los nodos del arbol en sus diferentes niveles y de izquierda a derecha
-//caso de corte
-if(!this.left && !this.right) return 1
-if(this.left && !this.right) return 1 + this.left.size()
-if(!this.left && this.right) return 1 + this.right.size()
-if(this.left && this.right) return 1 + this.right.size() + this.left.size()
-}
-
-
-
-BinarySearchTree.prototype.contains = function(value){
-if(this.value === value) return true;
-if(value > this.value){
-  if(!this.right)return false;
-  else return this.right.contains(value);
-}
-if(value < this.value){
-  if(!this.left) return false;
-  else return this.left.contains(value);
-}
-}
-
-// recibimos como parametro cb y order(se autollaman cuando las declaramos dentro del bloque(recursividad))
-BinarySearchTree.prototype.depthFirstForEach = function(cb, order){
-  //pensar como hace el recorrido depthFirstForEach(ver imagen para dare una idea)
-
-if(order === "post-order"){
-  if(this.left) this.left.depthFirstForEach(cb, order)
-  if(this.right) this.right.depthFirstForEach(cb, order)
-  cb(this.value)
-}
-if(order === "pre-order"){
-  cb(this.value)
-  if(this.left) this.left.depthFirstForEach(cb, order)
-  if(this.right) this.right.depthFirstForEach(cb, order)
-}else if
-  (order === "in-order" || !order === undefined){
-    if(this.left) this.left.depthFirstForEach(cb, order)
-    cb(this.value)
-    if(this.right) this.right.depthFirstForEach(cb, order)
-}
-}
-
-
-BinarySearchTree.prototype.breadthFirstForEach = function(cb, array = []){
-//notese que en este ejercicio necesitamos un array como parametro para ir guardando la referencia
-cb(this.value)
-if(this.left) array.push(this.left)
-if(this.right) array.push(this.right)
-
-let next = array.shift()
-//caso de corte y a la vez mi llamada a recursion
-if(next) next.breadthFirstForEach(cb, array)
-//if(array.length > 0) array.shift().breadthFirstForEach(cb, array)
-
-}
-
-
-// No modifiquen nada debajo de esta linea
+// No modificar nada debajo de esta línea
 // --------------------------------
 
 module.exports = {
-  BinarySearchTree,
+  factorear,
+  bubbleSort,
+  insertionSort,
+  selectionSort,
 };
